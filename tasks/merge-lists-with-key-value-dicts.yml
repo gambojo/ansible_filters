@@ -1,6 +1,75 @@
 ---
-- name: merge-lists-with-key-value-dicts | Check
-  include_tasks: merge-lists-with-key-value-dicts-check.yml
+- name: merge-lists-with-key-value-dicts | Include vars
+  ansible.builtin.include_vars: merge-lists-with-key-value-dicts.yml
+
+- name: merge-lists-with-key-value-dicts | check define
+  ansible.builtin.assert:
+    that:
+      - source_list is defined
+      - source_list is iterable
+      - custom_list is defined
+      - custom_list is iterable
+    quiet: true
+
+- name: merge-lists-with-key-value-dicts | Check if keys of source_list is equall to keys of custom_list
+  ansible.builtin.assert:
+    that: key_value[0] == item
+    quiet: true
+  loop: >-
+      {%- set keys = [] -%}
+      {%- for item in custom_list -%}
+      {%- for key in item.keys() -%}
+      {%- if loop.index == 1 -%}
+      {%- set x = keys.append(key) -%}
+      {%- endif -%}
+      {%- endfor -%}
+      {%- endfor -%}
+      {{- keys -}}
+
+- name: merge-lists-with-key-value-dicts | Check if values of source_list is equall to values of custom_list
+  ansible.builtin.assert:
+    that: key_value[1] == item
+    quiet: true
+  loop: >-
+      {%- set keys = [] -%}
+      {%- for item in custom_list -%}
+      {%- for key in item.keys() -%}
+      {%- if loop.index == 2 -%}
+      {%- set x = keys.append(key) -%}
+      {%- endif -%}
+      {%- endfor -%}
+      {%- endfor -%}
+      {{- keys -}}
+
+- name: merge-lists-with-key-value-dicts | Check if keys of custom_list is equall to keys of source_list
+  ansible.builtin.assert:
+    that: key_value_for_check[0] == item
+    quiet: true
+  loop: >-
+      {%- set keys = [] -%}
+      {%- for item in source_list -%}
+      {%- for key in item.keys() -%}
+      {%- if loop.index == 1 -%}
+      {%- set x = keys.append(key) -%}
+      {%- endif -%}
+      {%- endfor -%}
+      {%- endfor -%}
+      {{- keys -}}
+
+- name: merge-lists-with-key-value-dicts | Check if values of custom_list is equall to values of source_list
+  ansible.builtin.assert:
+    that: key_value_for_check[1] == item
+    quiet: true
+  loop: >-
+      {%- set keys = [] -%}
+      {%- for item in source_list -%}
+      {%- for key in item.keys() -%}
+      {%- if loop.index == 2 -%}
+      {%- set x = keys.append(key) -%}
+      {%- endif -%}
+      {%- endfor -%}
+      {%- endfor -%}
+      {{- keys -}}
 
 - name: merge-lists-with-key-value-dicts | Set default key value
   ansible.builtin.set_fact:

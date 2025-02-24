@@ -14,5 +14,3 @@ custom_list:
   - key: "key-2"
     value: "custom-value-2"
 
-key_value: "{{ source_list[0].keys() }}"
-key_value_for_check: "{{ custom_list[0].keys() }}"
