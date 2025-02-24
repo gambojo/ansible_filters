@@ -1,0 +1,18 @@
+---
+use_only_jinja: true
+source_list:
+  - key: "key-1"
+    value: "value-1"
+  - key: "key-2"
+    value: "value-2"
+  - key: "key-3"
+    value: "value-3"
+
+custom_list:
+  - key: "key-1"
+    value: "custom-value-1"
+  - key: "key-2"
+    value: "custom-value-2"
+
+key_value: "{{ source_list[0].keys() }}"
+key_value_for_check: "{{ custom_list[0].keys() }}"

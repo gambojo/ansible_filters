@@ -1,0 +1,47 @@
+---
+- name: merge-lists-with-key-value-dicts | Check
+  include_tasks: merge-lists-with-key-value-dicts-check.yml
+
+- name: merge-lists-with-key-value-dicts | Set default key value
+  ansible.builtin.set_fact:
+    key_name: "{{ key_value[0] }}"
+    value_name: "{{ key_value[1] }}"
+
+- name: merge-lists-with-key-value-dicts | Merge lists via jinja
+  ansible.builtin.set_fact:
+    merged_list: >-
+      {%- set __output = [] -%}
+      {%- for __item in source_list -%}
+      {%-   if __item[key_name] not in custom_list | map(attribute=key_name) -%}
+      {%-     set __temp_var = {} -%}
+      {%-     set x = __temp_var.__setitem__(key_name, __item[key_name]) -%}
+      {%-     set x = __temp_var.__setitem__(value_name, __item[value_name]) -%}
+      {{-     __output.append(__temp_var) -}}
+      {%-   else -%}
+      {%-     set __temp_var = {} -%}
+      {%-     set __value = (custom_list | selectattr(key_name, 'equalto', __item[key_name]) | map(attribute=value_name))[0] -%}
+      {%-     set x = __temp_var.__setitem__(key_name, __item[key_name]) -%}
+      {%-     set x = __temp_var.__setitem__(value_name, __value) -%}
+      {{-     __output.append(__temp_var) -}}
+      {%-   endif -%}
+      {%- endfor -%}
+      {{- __output -}}
+  when: use_only_jinja
+
+- name: merge-lists-with-key-value-dicts | Merge lists via filters
+  ansible.builtin.set_fact:
+    merged_list: >-
+      {{
+        merged_list | default([]) + [{
+          key_name: item.key,
+          value_name: item.value }]
+      }}
+  with_dict: "{{
+                source_list | items2dict(
+                    key_name=key_name,
+                    value_name=value_name) |
+                  combine(custom_list | items2dict(
+                        key_name=key_name,
+                        value_name=value_name))
+              }}"
+  when: not use_only_jinja

@@ -1,0 +1,12 @@
+---
+galaxy_info:
+  role_name: ansible_filters
+  author: gambojo
+  namespace: filters
+  description: Tasks with filters for first manipulating of data
+  license: "license (MIT)"
+  min_ansible_version: "2.9"
+  platforms:
+    - name: Debian
+      versions:
+        - bookworm
