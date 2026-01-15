@@ -1,1 +1,19 @@
-add new task fike
+---
+- name: clean-files-and-dirs | Search objects from patterns
+  ansible.builtin.find:
+    paths: "{{ item.path }}"
+    patterns: "{{ item.patterns }}"
+    use_regex: true
+    recurse: true
+    hidden: true
+    file_type: any
+  register: found_to_delete
+  loop: "{{ clean_files_and_dirs }}"
+  when: clean_files_and_dirs is defined
+
+- name: clean-files-and-dirs | Remove founded objects
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ found_to_delete.results | map(attribute='files') | flatten }}"
+  when: clean_files_and_dirs is defined
