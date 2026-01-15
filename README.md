@@ -1,5 +1,5 @@
 ## Examples
-### 
+### Run task merge-lists-with-key-value-dicts
 ```yaml
 - hosts: localhost
   vars:
@@ -31,7 +31,7 @@
         msg: "{{ merged_list }}"
 ```
 
-### Coll task clean-files-and-dirs
+### Run task clean-files-and-dirs
 ```yaml
 - hosts: localhost
   vars:
