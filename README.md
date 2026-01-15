@@ -38,14 +38,15 @@
     clean_files_and_dirs:
       - path: '/home/user'
         patterns:
-          - Bookshelf
-          - Documents
-          - Downloads
-          - Music
-          - Pictures
-          - Public
-          - Templates
-          - Videos
+          - 'Bookshelf'
+          - 'Documents'
+          - 'Downloads'
+          - 'Music'
+          - 'Pictures'
+          - 'Public'
+          - 'Templates'
+          - 'Videos'
+          - '.*.log$'
 
   tasks:
     - name: Clean dirs from home dirs
