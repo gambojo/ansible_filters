@@ -15,5 +15,6 @@
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: absent
+  register: clean_files_and_dirs_resuits
   loop: "{{ found_to_delete.results | map(attribute='files') | flatten }}"
   when: clean_files_and_dirs is defined
