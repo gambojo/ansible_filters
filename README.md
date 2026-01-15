@@ -1,4 +1,5 @@
-### Example
+## Examples
+### 
 ```yaml
 - hosts: localhost
   vars:
@@ -25,8 +26,35 @@
         name: ansible_filters
         tasks_from: merge-lists-with-key-value-dicts.yml
 
-    - name: Print result
+    - name: Print results
       debug:
         msg: "{{ merged_list }}"
+```
+
+### Coll task clean-files-and-dirs
+```yaml
+- hosts: localhost
+  vars:
+    clean_files_and_dirs:
+      - path: '/home/user'
+        patterns:
+          - Bookshelf
+          - Documents
+          - Downloads
+          - Music
+          - Pictures
+          - Public
+          - Templates
+          - Videos
+
+  tasks:
+    - name: Clean dirs from home dirs
+      ansible.builtin.include_role:
+        name: ansible_filters
+        tasks_from: clean-files-and-dirs.yml
+
+    - name: Print results
+      debug:
+        msg: "{{ clean_files_and_dirs_resuits }}"
 ```
 
