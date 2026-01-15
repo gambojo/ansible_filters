@@ -2,3 +2,5 @@
 - name: ansible_filters | Merge lists with keys and values
   ansible.builtin.include_tasks: merge-lists-with-key-value-dicts.yml
 
+- name: ansible_filters | Clean files and dirs from patterns
+  ansible.builtin.include_tasks: clean-files-and-dirs.yml
