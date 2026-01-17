@@ -3,13 +3,15 @@
   ansible.builtin.find:
     paths: "{{ item.path }}"
     patterns: "{{ item.patterns }}"
-    use_regex: true
-    recurse: true
-    hidden: true
-    file_type: any
+    use_regex: "{{ clean_files_and_dirs_regex | default(true) }}"
+    recurse: "{{ clean_files_and_dirs_recurse | default(true) }}"
+    hidden: "{{ clean_files_and_dirs_hidden | default(true) }}"
+    file_type:  "{{ clean_files_and_dirs_type | default('any') }}"
   register: found_to_delete
   loop: "{{ clean_files_and_dirs }}"
-  when: clean_files_and_dirs is defined
+  when:
+    - clean_files_and_dirs is defined
+    - clean_files_and_dirs | length > 0
 
 - name: clean-files-and-dirs | Remove founded objects
   ansible.builtin.file:
@@ -17,4 +19,6 @@
     state: absent
   register: clean_files_and_dirs_resuits
   loop: "{{ found_to_delete.results | map(attribute='files') | flatten }}"
-  when: clean_files_and_dirs is defined
+  when:
+    - clean_files_and_dirs is defined
+    - clean_files_and_dirs | length > 0
